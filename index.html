@@ -484,10 +484,14 @@
   function setupMobileServiceMotion(){
     serviceCopy.style.opacity='1';
     const trigger=ScrollTrigger.create({
-      trigger:serviceZone,
-      start:'center center',
+      trigger:artboard,
+      start:()=>{
+        const zoneCenter = serviceZone.offsetTop + serviceZone.offsetHeight / 2;
+        const offset = zoneCenter - innerHeight / 2;
+        return `top top-=${offset}px`;
+      },
       end:'+=1200',
-      pin:artboard,
+      pin:true,
       scrub:true,
       onUpdate:self=>{
         let step=Math.min(3, Math.floor(self.progress*4));
