@@ -1,0 +1,43 @@
+/* Bloqueia scroll imediatamente via CSS, sem depender de JS */
+html.bv-loading{overflow:hidden}
+
+#bv-preloader{position:fixed;inset:0;z-index:99999;overflow:hidden;background:#040100;display:flex;align-items:center;justify-content:center;font-family:'Inter','Helvetica Neue',Arial,sans-serif;transition:opacity .8s ease,visibility .8s}
+#bv-preloader.bv-hide{opacity:0;visibility:hidden;pointer-events:none}
+
+/* GPU-only: só opacity e transform, sem layout reflow */
+#bv-preloader .bv-glow{position:absolute;inset:0;background:radial-gradient(ellipse 38vw 42vh at 47% 46%,rgba(210,65,10,.95) 0%,rgba(150,42,5,.7) 35%,rgba(60,15,2,.35) 65%,transparent 100%);opacity:.3;transform:scale(.9);will-change:opacity,transform;transition:opacity .1s linear,transform .1s linear}
+#bv-preloader .bv-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,120,50,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,120,50,.06) 1px,transparent 1px);background-size:70px 70px;-webkit-mask-image:radial-gradient(circle at 50% 46%,#000 0%,transparent 75%);mask-image:radial-gradient(circle at 50% 46%,#000 0%,transparent 75%)}
+#bv-preloader .bv-vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 46%,transparent 30%,rgba(0,0,0,.85) 100%)}
+
+/* Anéis: isolados em sua própria camada */
+#bv-preloader .bv-rings{position:absolute;left:50%;top:46%;width:72.7vmin;height:72.7vmin;transform:translate(-50%,-50%)}
+#bv-preloader .bv-rings i{position:absolute;left:50%;top:50%;border-radius:50%;border:1px solid rgba(255,120,60,.14);transform:translate(-50%,-50%);will-change:transform,border-color}
+#bv-preloader .bv-rings i:nth-child(1){width:100%;height:100%;border-color:rgba(255,120,60,.28)}
+#bv-preloader .bv-rings i:nth-child(2){width:88%;height:88%}
+#bv-preloader .bv-rings i:nth-child(3){width:76%;height:76%}
+#bv-preloader .bv-rings i:nth-child(4){width:64%;height:64%}
+#bv-preloader .bv-rings i:nth-child(5){width:52%;height:52%}
+#bv-preloader .bv-rings i:nth-child(6){width:40%;height:40%}
+
+#bv-preloader .bv-center{position:relative;display:flex;flex-direction:column;align-items:center;margin-top:-4vh}
+#bv-preloader .bv-logo{width:clamp(220px,29vw,500px);height:auto;filter:drop-shadow(0 0 18px rgba(255,90,20,.35));animation:bvFloat 3s ease-in-out infinite;will-change:transform}
+
+/* Barra: usa transform:scaleX em vez de width para evitar reflow */
+#bv-preloader .bv-bar{margin-top:clamp(28px,5vh,52px);width:clamp(180px,20.4vw,342px);height:9px;border-radius:9px;background:rgba(255,255,255,.1);position:relative;overflow:hidden}
+#bv-preloader .bv-fill{position:absolute;left:0;top:0;height:100%;width:100%;border-radius:9px;background:linear-gradient(90deg,#ff4d0d 0%,#ff8a1f 65%,#ffd76a 90%,#fff1b0 100%);box-shadow:0 0 12px rgba(255,120,20,.7),0 0 28px rgba(255,90,10,.45);transform:scaleX(0);transform-origin:left center;will-change:transform}
+#bv-preloader .bv-fill::after{content:"";position:absolute;right:0;top:50%;width:46px;height:22px;transform:translateY(-50%);border-radius:50%;background:radial-gradient(ellipse at 100% 50%,rgba(255,215,120,.85) 0%,rgba(255,140,30,.45) 40%,transparent 72%);filter:blur(4px);pointer-events:none}
+#bv-preloader .bv-text{margin-top:clamp(20px,3.6vh,34px);color:rgba(255,255,255,.85);font-size:clamp(11px,.95vw,15px);letter-spacing:.35em;font-weight:300;white-space:pre}
+
+@keyframes bvRing{0%,100%{transform:translate(-50%,-50%) scale(.97);border-color:rgba(255,120,60,.10)}50%{transform:translate(-50%,-50%) scale(1.03);border-color:rgba(255,140,70,.30)}}
+@keyframes bvOuter{0%,100%{border-color:rgba(255,120,60,.22)}50%{border-color:rgba(255,140,70,.42)}}
+@keyframes bvSpin{to{transform:rotate(360deg)}}
+@keyframes bvFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+#bv-preloader .bv-rings i:nth-child(n+2){animation:bvRing 4.2s ease-in-out infinite}
+#bv-preloader .bv-rings i:nth-child(2){animation-delay:0s}
+#bv-preloader .bv-rings i:nth-child(3){animation-delay:.35s}
+#bv-preloader .bv-rings i:nth-child(4){animation-delay:.7s}
+#bv-preloader .bv-rings i:nth-child(5){animation-delay:1.05s}
+#bv-preloader .bv-rings i:nth-child(6){animation-delay:1.4s}
+#bv-preloader .bv-rings i:nth-child(1){animation:bvOuter 4.2s ease-in-out infinite}
+#bv-preloader .bv-rings b{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0deg,transparent 250deg,rgba(255,150,70,.9) 350deg,transparent 360deg);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1px));mask:radial-gradient(farthest-side,transparent calc(100% - 2px),#000 calc(100% - 1px));animation:bvSpin 3.2s linear infinite;filter:drop-shadow(0 0 6px rgba(255,120,40,.9));will-change:transform}
