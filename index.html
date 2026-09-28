@@ -109,15 +109,11 @@
       .service-copy{position:absolute;top:77%;left:8%;width:84%;min-height:21%;background:#000;color:var(--muted);text-align:center}
       .service-copy h3{margin:0 0 5px;color:#f65319;font-size:clamp(16px,4.2vw,20px);font-weight:700;line-height:1.15}
       .service-copy p{margin:0;font-size:clamp(11px,3vw,13px);line-height:1.35}
-      .service-dots{display:block}
-      .service-dots button{--dot-scale:1;position:absolute;z-index:3;width:44px;height:44px;margin:-22px 0 0 -22px;padding:0;border:0;background:transparent;cursor:pointer}
-      .service-dots button::before{content:"";position:absolute;left:50%;top:50%;width:11px;height:11px;border-radius:50%;background:#fff;box-shadow:0 8px 18px transparent;transform:translate(-50%,-50%) scale(var(--dot-scale));transition:background .18s ease,box-shadow .18s ease}
-      .service-dots button.active::before,.service-dots button.motion-hot::before{background:#e53810;box-shadow:0 8px 18px #e5381070}
-      .service-dots button:focus-visible{outline:2px solid #fff;outline-offset:-7px;border-radius:50%}
-      .service-dots button:nth-child(1){left:50.53%;top:25.67%}
-      .service-dots button:nth-child(2){left:24.4%;top:23.33%}
-      .service-dots button:nth-child(3){left:67.6%;top:19.25%}
-      .service-dots button:nth-child(4){left:77.73%;top:22.22%}
+      .service-dots{display:flex;justify-content:center;gap:12px;position:absolute;top:73%;left:0;width:100%;z-index:3}
+      .service-dots button{position:relative;width:16px;height:16px;margin:0;padding:0;border:0;background:transparent;cursor:pointer}
+      .service-dots button::before{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:50%;background:#666;transform:translate(-50%,-50%);transition:background .18s ease}
+      .service-dots button.active::before{background:#e53810}
+      .service-dots button:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:50%}
     }
 
     @media(prefers-reduced-motion:reduce){
@@ -485,6 +481,25 @@
     };
   }
 
+  function setupMobileServiceMotion(){
+    serviceCopy.style.opacity='1';
+    const trigger=ScrollTrigger.create({
+      trigger:serviceZone,
+      start:'top 75%',
+      end:'bottom 35%',
+      scrub:true,
+      onUpdate:self=>{
+        let step=Math.floor(self.progress*4);
+        step=clamp(step,0,3);
+        showService(step,false,true);
+      }
+    });
+    return()=>{
+      trigger.kill();
+      showService(0,false,true);
+    };
+  }
+
   if(window.gsap&&window.ScrollTrigger){
     gsap.registerPlugin(ScrollTrigger);
     const motionMedia=gsap.matchMedia();
@@ -535,7 +550,7 @@
         }
       });
 
-      const stopServiceMotion=mobile?setupServiceMotion():null;
+      const stopServiceMotion=mobile?setupMobileServiceMotion():setupServiceMotion();
       return()=>{
         stopServiceMotion?.();
       };
