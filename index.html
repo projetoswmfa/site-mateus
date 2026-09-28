@@ -485,11 +485,7 @@
     serviceCopy.style.opacity='1';
     const trigger=ScrollTrigger.create({
       trigger:artboard,
-      start:()=>{
-        const zoneCenter = serviceZone.offsetTop + serviceZone.offsetHeight / 2;
-        const offset = zoneCenter - innerHeight / 2;
-        return `top top-=${offset}px`;
-      },
+      start:'23.95% center',
       end:'+=1200',
       pin:true,
       scrub:true,
