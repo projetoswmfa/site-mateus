@@ -485,17 +485,17 @@
     serviceCopy.style.opacity='1';
     const trigger=ScrollTrigger.create({
       trigger:serviceZone,
-      start:'top 75%',
-      end:'bottom 35%',
+      start:'center center',
+      end:'+=1200',
+      pin:artboard,
       scrub:true,
       onUpdate:self=>{
-        let step=Math.floor(self.progress*4);
-        step=clamp(step,0,3);
+        let step=Math.min(3, Math.floor(self.progress*4));
         showService(step,false,true);
       }
     });
     return()=>{
-      trigger.kill();
+      trigger.kill(true);
       showService(0,false,true);
     };
   }
